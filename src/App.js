@@ -1,11 +1,12 @@
-import React, { } from "react";
-import classes from './App.scss';
+import React from "react";
+import Layout from './components/Layout/Layout';
+import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 
 function App() {
-  console.log(classes)
   return (
     <div className="App">
-      <button className={classes.Button} >Button</button>
+      <Layout> <BurgerBuilder /></Layout>
+     
     </div>
   );
 }
