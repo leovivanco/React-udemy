@@ -51,6 +51,7 @@ const BurgerBuilder = () => {
     setIngredients(updateIngredients);
     setTotalPrice(newPrice);
   }
+
   const removeIngredientsHandler = (type) => {
     const oldCount = ingredients[type] > 0 ? ingredients[type] : 1;
     const updatedCounted = oldCount - 1;
@@ -64,17 +65,26 @@ const BurgerBuilder = () => {
     setIngredients(updateIngredients);
     setTotalPrice(newPrice);
   }
+
+  const continueHandle = () => alert("Clicked Continue");
+  const cancelHandle = () => setShowModal(false);
+ 
   return (
     <Aux>
         
         <CSSTransition
-            timeout={2000} 
+            timeout={1000} 
             in={showModal}
             classNames="alert"
             unmountOnExit
         >
             <Modal show={showModal} hide={() => setShowModal(false)}>
-                <OrderSummary ingredients={ingredients} totalPrice={totalPrice} />
+                <OrderSummary 
+                  ingredients={ingredients}
+                  totalPrice={totalPrice}
+                  continueHandle={continueHandle}
+                  cancelHandle={cancelHandle}
+                 />
             </Modal>
         </CSSTransition>
       <div>

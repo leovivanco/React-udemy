@@ -6,10 +6,11 @@ import Aux from "../../../hoc/Aux"
 const Modal = props => {
     return (
         <Aux>
-            <Backdrop show={props.show} hide={props.hide} />
+            {console.log(props)}
             <div className={style.Modal}>
                 {props.children}
             </div>
+            <Backdrop show={props.show} hide={props.hide} />
         </Aux>
     )
 }

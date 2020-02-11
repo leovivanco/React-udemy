@@ -1,7 +1,8 @@
 import React from 'react'
+import Button from "../UI/Button/Button";
 
 const OrderSummary = props => {
-    const { ingredients, totalPrice } = props;
+    const { ingredients, totalPrice, continueHandle, cancelHandle } = props;
     const ingredientsKeys = Object.keys(ingredients);
 
     return (
@@ -10,7 +11,9 @@ const OrderSummary = props => {
             {ingredientsKeys.map((item, i) => (<li key={item+1}>
                 {item} items: <strong>{ingredients[item]}</strong>
             </li>))}
-            <p>Total: <strong>$ {totalPrice}</strong> </p>
+            <p>Total: <strong>$ {totalPrice.toFixed(2)}</strong> </p>
+            <Button type="Danger" click={cancelHandle}>Cancel</Button>
+            <Button type="Success" click={continueHandle}>Continue</Button>
         </div>
     )
 }
