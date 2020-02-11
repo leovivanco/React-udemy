@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useEffect } from "react";
 import Button from "../UI/Button/Button";
 
 const OrderSummary = props => {
     const { ingredients, totalPrice, continueHandle, cancelHandle } = props;
     const ingredientsKeys = Object.keys(ingredients);
+
+    useEffect(() => {
+      console.log("updated 1")
+    });
+
 
     return (
         <div>

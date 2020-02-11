@@ -4,7 +4,7 @@ import style from "./Logo.module.scss";
 
 const Logo = () => (
   <div className={style.Logo}>
-    <img src={logo} alt="Logo" srcset="" />
+    <img src={logo} alt="Logo" />
   </div>
 );
 
