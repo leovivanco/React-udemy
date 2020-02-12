@@ -4,12 +4,13 @@ import Burger from "../../components/Burger/Burger";
 import BuildControls from "../../components/Burger/BuildControls/BuildControls";
 import Modal from "../../components/UI/Modal/Modal";
 import OrderSummary from "../../components/OrderSummary/OrderSummary";
+import Spinner from "../../components/Spinner/Spinner";
 import { CSSTransition } from 'react-transition-group';
 import axios from "../../axios-orders";
+import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 
 import "./style.scss";
 
-console.log(axios);
 const INGREDIENT_PRICES = {
     salad: 0.5,
     bacon: 0.4,
@@ -27,19 +28,18 @@ const BurgerBuilder = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [purchaseDisable, setPurchaseDisable] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
       if(totalPrice > 0) {
-        setPurchaseDisable(false)
+        setPurchaseDisable(false);
       }else{
         setTotalPrice(0)
         setPurchaseDisable(true);
       }
   }, [totalPrice])
 
-  const disableButton = ingredient => {
-    return ingredients[ingredient] === 0
-  }
+  const disableButton = ingredient => ingredients[ingredient] === 0;
 
   const addIngredientsHandler = (type) => {
     const oldCount = ingredients[type];
@@ -70,6 +70,7 @@ const BurgerBuilder = () => {
   }
   
   const sendData = () => {
+    setLoading(true);
     const order = {
       ingredients,
       totalPrice,
@@ -83,11 +84,16 @@ const BurgerBuilder = () => {
       },
       deliveryMethod: "fastest"
     }
-    axios
-      .post("https://react-my-burger-28206.firebaseio.com/orders.json", order)
-      .then(response => console.log(response))
-      .catch(error => console.log(error));
-
+    
+    axios.post("/orders.json", order)
+      .then(response => {
+        setPurchaseDisable(false);
+        setLoading(false)
+      })
+      .catch(error => {
+        setPurchaseDisable(false);
+        setLoading(false);
+      });
   }
 
   const continueHandle = () => sendData();
@@ -95,37 +101,40 @@ const BurgerBuilder = () => {
  
   return (
     <Aux>
-        
-        <CSSTransition
-            timeout={1000} 
-            in={showModal}
-            classNames="alert"
-            unmountOnExit
-        >
-            <Modal show={showModal} hide={() => setShowModal(false)}>
-                <OrderSummary 
-                  ingredients={ingredients}
-                  totalPrice={totalPrice}
-                  continueHandle={continueHandle}
-                  cancelHandle={cancelHandle}
-                 />
-            </Modal>
-        </CSSTransition>
+      <CSSTransition
+        timeout={1000}
+        in={showModal}
+        classNames="alert"
+        unmountOnExit
+      >
+        <Modal show={showModal} hide={() => setShowModal(false)}>
+          {loading ? (
+            <Spinner />
+          ) : (
+            <OrderSummary
+              ingredients={ingredients}
+              totalPrice={totalPrice}
+              continueHandle={continueHandle}
+              cancelHandle={cancelHandle}
+            />
+          )}
+        </Modal>
+      </CSSTransition>
       <div>
         <Burger ingredients={ingredients} />
       </div>
       <div>
-        <BuildControls 
-            addIngredientsHandler={addIngredientsHandler}
-            removeIngredientsHandler={removeIngredientsHandler}
-            disableButton={disableButton}
-            totalPrice={totalPrice}
-            purchaseDisable={purchaseDisable}
-            setShowModal={setShowModal}
+        <BuildControls
+          addIngredientsHandler={addIngredientsHandler}
+          removeIngredientsHandler={removeIngredientsHandler}
+          disableButton={disableButton}
+          totalPrice={totalPrice}
+          purchaseDisable={purchaseDisable}
+          setShowModal={setShowModal}
         />
       </div>
     </Aux>
   );
 };
 
-export default BurgerBuilder;
+export default withErrorHandler(BurgerBuilder, axios);
