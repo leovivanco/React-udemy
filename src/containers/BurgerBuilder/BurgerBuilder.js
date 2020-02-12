@@ -5,8 +5,11 @@ import BuildControls from "../../components/Burger/BuildControls/BuildControls";
 import Modal from "../../components/UI/Modal/Modal";
 import OrderSummary from "../../components/OrderSummary/OrderSummary";
 import { CSSTransition } from 'react-transition-group';
+import axios from "../../axios-orders";
+
 import "./style.scss";
 
+console.log(axios);
 const INGREDIENT_PRICES = {
     salad: 0.5,
     bacon: 0.4,
@@ -65,8 +68,29 @@ const BurgerBuilder = () => {
     setIngredients(updateIngredients);
     setTotalPrice(newPrice);
   }
+  
+  const sendData = () => {
+    const order = {
+      ingredients,
+      totalPrice,
+      customer: {
+        name: "Leonardo",
+        address: {
+          street: "test 1",
+          zipcode: "41351",
+          country: "Brazil"
+        }
+      },
+      deliveryMethod: "fastest"
+    }
+    axios
+      .post("https://react-my-burger-28206.firebaseio.com/orders.json", order)
+      .then(response => console.log(response))
+      .catch(error => console.log(error));
 
-  const continueHandle = () => alert("Clicked Continue");
+  }
+
+  const continueHandle = () => sendData();
   const cancelHandle = () => setShowModal(false);
  
   return (
