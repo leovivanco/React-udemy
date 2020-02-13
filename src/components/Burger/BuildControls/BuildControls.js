@@ -18,22 +18,31 @@ const BuildControls = props => {
         },
     ]
     return (
-        <div className={style.BuildControls}>
-            <p>Total: <strong>{props.totalPrice.toFixed(2)}</strong></p>
-            {
-                controls.map((item, index) => 
-                <BuildControl  
-                    key={item.label + index}
-                    label={item.label}
-                    type={item.type}
-                    addIngredientsHandler={() => props.addIngredientsHandler(item.type)}
-                    removeIngredientsHandler={() => props.removeIngredientsHandler(item.type)}
-                    disableButton={props.disableButton(item.type)} 
-                />)
+      <div className={style.BuildControls}>
+        <p>
+          Total: <strong>{props.totalPrice.toFixed(2)}</strong>
+        </p>
+        {controls.map((item, index) => (
+          <BuildControl
+            key={item.label + index}
+            label={item.label}
+            type={item.type}
+            addIngredientsHandler={() => props.addIngredientsHandler(item.type)}
+            removeIngredientsHandler={() =>
+              props.removeIngredientsHandler(item.type)
             }
-            <button disabled={props.purchaseDisable} className={style.OrderButton} onClick={() => props.setShowModal(true)}>Order Now</button>
-        </div>
-    )
+            disableButton={props.disableButton(item.type)}
+          />
+        ))}
+        <button
+          disabled={props.purchaseDisable}
+          className={style.OrderButton}
+          onClick={() => props.setShowModal(true)}
+        >
+          Order Now
+        </button>
+      </div>
+    );
 }
 
 export default BuildControls;

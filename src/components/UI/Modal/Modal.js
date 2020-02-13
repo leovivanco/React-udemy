@@ -5,13 +5,18 @@ import Aux from "../../../hoc/Aux/Aux"
 
 const Modal = props => {
     return (
-        <Aux>
-            <div className={style.Modal}>
-                {props.children}
-            </div>
-            <Backdrop show={props.show} closed={props.hide} />
-        </Aux>
-    )
+      <Aux>
+        <div
+          style={{
+            opacity: props.show ? "1" : "0"
+          }}
+          className={style.Modal}
+        >
+          {props.children}
+        </div>
+        <Backdrop show={props.show} closed={props.hide} />
+      </Aux>
+    );
 }
 
 export default Modal
